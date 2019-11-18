@@ -20,35 +20,17 @@
 	<script src="/static/js/jquery-3.1.1.min.js"></script>
 	<script src="/static/js/toastr/toastr.min.js"></script>
 	<script src="/static/js/socket.io.js"></script>
-
 	<script>
 		var map = L.map('map', {
 		    // center: [8.9475, 125.5406], butuan center
-		    center: [8.94398,125.52312],
+		    center: [8.9475, 125.5406],
 		    zoom: 20,
 		    useCache: true,
 		});
 
 		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-		}).addTo(map);
-
-		var marker = L.marker([8.94398,125.52312]).bindPopup("<b>CAR 1</b><br>Hello! You are here.").addTo(map);
-		var marker2 = L.marker([8.9424,125.5198]).bindPopup("<b>CAR 2</b><br>Hello! You are here.").addTo(map);
-		var marker3 = L.marker([8.9442,125.5321]).bindPopup("<b>CAR 3</b><br>Hello! You are here.").addTo(map);
-
-		marker.on('mouseover', function(){
-			marker.openPopup();
-		});
-
-		marker2.on('mouseover', function(){
-			marker2.openPopup();
-		});
-
-		marker3.on('mouseover', function(){
-			marker3.openPopup();
-		});
-
+		}).addTo(map);		
 
 		function toastrOptions() {
             toastr.options = {
@@ -70,13 +52,18 @@
             }
         }
 
-
         socket = io.connect(location.protocol + '//' + document.domain + ":" + location.port + "/received")
 		
 		/* Receiving Emit to Received*/
 		socket.on('received', function(res){
 			toastrOptions();
-    		toastr.success(res, 'Location');
+			var data = res.split(",");
+    		toastr.success("Lat: " + data[0] + " Long: " +data[1], 'Location');
+
+			var marker = L.marker([data[0],data[1]]).bindPopup("<b>CAR 1</b><br>Hello! You are here.").addTo(map);
+			marker.on('mouseover', function(){
+				marker.openPopup();
+			});
 		});
     
 	</script>

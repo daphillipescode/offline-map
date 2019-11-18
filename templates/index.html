@@ -21,6 +21,8 @@
 	<script src="/static/js/toastr/toastr.min.js"></script>
 	<script src="/static/js/socket.io.js"></script>
 	<script>
+		
+
 		var map = L.map('map', {
 		    // center: [8.9475, 125.5406], butuan center
 		    center: [8.9475, 125.5406],
@@ -59,11 +61,13 @@
 			toastrOptions();
 			var data = res.split(",");
     		toastr.success("Lat: " + data[0] + " Long: " +data[1], 'Location');
-
+    		map.panTo([data[0],data[1]]);
 			var marker = L.marker([data[0],data[1]]).bindPopup("<b>CAR 1</b><br>Hello! You are here.").addTo(map);
 			marker.on('mouseover', function(){
 				marker.openPopup();
 			});
+
+
 		});
     
 	</script>
